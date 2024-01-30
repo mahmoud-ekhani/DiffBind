@@ -20,7 +20,7 @@ This section describes how to prepare the Binding MOAD dataset for processing.
     ``` bash
     python -W ignore process_bindingmoad.py <bindingmoad_dir>
     ```
-    - *Optional:* To create a dataset with only C-alpha (Cα) pocket representation, add the 
+    -*Optional:* To create a dataset with only C-alpha (Cα) pocket representation, add the 
     '--ca_only' flag to the command:
         ```bash
         python -W ignore process_bindingmoad.py <bindingmoad_dir> --ca_only
