@@ -170,9 +170,10 @@ def filter_and_flatten(ligand_dict: dict, qed_thresh: float, max_occurences: int
         ]
     """
     flatten_examples = [(family, prot, mol_list) 
-                    for family in ligand_dict.values()
-                    for prot, lig_list in family.items()
-                    for mol_list in lig_list]
+                    for family in ligand_dict
+                    for prot in ligand_dict[family]
+                    for mol_list in ligand_dict[family][prot]
+                    ]
 
     # Shuffle the flatten_examples randomly
     random.seed(seed)
@@ -685,7 +686,7 @@ if __name__ == '__main__':
         filtered_examples = filter_and_flatten(
             ligand_dict, args.qed_thresh, args.max_occurences, args.random_seed)
         print(f"{len(filtered_examples)} examples after filtering.")
-
+        print(f"example 0 :{filtered_examples[0]}")
         # Split the dataset based on the EC number
         data_split = split_by_ec_number(filtered_examples,
                                         args.num_val,
@@ -707,8 +708,8 @@ if __name__ == '__main__':
     n_samples_after = {}
     # Load and process the PDB files
     for split in data_split.keys():
-        lig_coords, lig_one_hot, lig_mask, pocket_coords, pocket_one_hot,\
-        pocket_mask, pdb_and_mol_ids, receptors, count = [[] for _ in range(9)], 0
+        lig_coords, lig_one_hot, lig_mask, pocket_coords, pocket_one_hot, pocket_mask, pdb_and_mol_ids, receptors = [[] for _ in range(8)]
+        count = 0
 
         pdb_sdf_dir = processed_dir / split
         pdb_sdf_dir.mkdir(exist_ok=True)
